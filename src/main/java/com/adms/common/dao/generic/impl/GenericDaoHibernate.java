@@ -89,6 +89,22 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 	{
 		return super.getHibernateTemplate().findByExample(example);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> findByCriteria(DetachedCriteria criteria) throws Exception {
+		return (List<T>) super.getHibernateTemplate().findByCriteria(criteria);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> findByHQL(String hql, Object...vals) throws Exception {
+		Session session = super.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery(hql);
+		for(int i = 0; i < vals.length; i++) {
+			query.setParameter(i, vals[i]);
+		}
+		
+		return (List<T>) query.list();
+	}
 
 	public boolean delete(PK id)
 			throws Exception
