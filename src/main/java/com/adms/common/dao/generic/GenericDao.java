@@ -26,4 +26,5 @@ public interface GenericDao<T, PK extends Serializable> {
 	public List<T> searchByExamplePaging(T object, Pageable pageable) throws Exception;
 	
 	public List<T> findByHQL(String hql, Object... vals) throws Exception;
+	public List<T> findByHQL(String hql) throws Exception;
 }

@@ -105,6 +105,10 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 		
 		return (List<T>) query.list();
 	}
+	
+	public List<T> findByHQL(String hql) throws Exception {
+		return findByHQL(hql, new Object[0]);
+	}
 
 	public boolean delete(PK id)
 			throws Exception
