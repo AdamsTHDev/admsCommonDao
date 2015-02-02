@@ -16,6 +16,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import com.adms.common.dao.generic.GenericDao;
+import com.adms.common.domain.CountableDomain;
 
 public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDaoSupport implements GenericDao<T, PK> {
 
@@ -234,6 +235,15 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 		}
 
 		return criteria.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<T> findByNamedQuery(String queryName, Object ... values) throws Exception {
+		return (List<T>) super.getHibernateTemplate().findByNamedQuery(queryName, values);
+	}
+
+	public Long countByNamedQuery(String queryName, Object ... values) throws Exception {
+		return ((CountableDomain) super.getHibernateTemplate().findByNamedQuery(queryName, values).get(0)).getTotalCount();
 	}
 
 }

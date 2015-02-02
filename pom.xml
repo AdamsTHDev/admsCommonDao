@@ -18,6 +18,12 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>com.adms.common</groupId>
+			<artifactId>admsCommonDomain</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
