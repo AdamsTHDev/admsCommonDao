@@ -20,7 +20,7 @@ public interface GenericDao<T, PK extends Serializable> {
 	
 	public Long findTotalCount() throws Exception;
 	public Long findTotalCount(final T object) throws Exception;
-	 
+	
 	public List<T> findByExamplePaging(T object, Pageable pageable) throws Exception;
 	
 	public List<T> searchByExamplePaging(T object, Pageable pageable) throws Exception;
@@ -29,6 +29,5 @@ public interface GenericDao<T, PK extends Serializable> {
 	public List<T> findByHQL(String hql) throws Exception;
 	
 	public List<T> findByNamedQuery(String queryName, Object ... values) throws Exception;
-
 	public Long countByNamedQuery(String queryName, Object ... values) throws Exception;
 }
