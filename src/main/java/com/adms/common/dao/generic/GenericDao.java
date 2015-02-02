@@ -20,7 +20,7 @@ public interface GenericDao<T, PK extends Serializable> {
 	
 	public Long findTotalCount() throws Exception;
 	public Long findTotalCount(final T object) throws Exception;
-	
+	 
 	public List<T> findByExamplePaging(T object, Pageable pageable) throws Exception;
 	
 	public List<T> searchByExamplePaging(T object, Pageable pageable) throws Exception;
