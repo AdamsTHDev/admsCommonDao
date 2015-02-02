@@ -102,11 +102,11 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 		for(int i = 0; i < vals.length; i++) {
 			query.setParameter(i, vals[i]);
 		}
-		
 		return (List<T>) query.list();
 	}
 	
 	public List<T> findByHQL(String hql) throws Exception {
+		
 		return findByHQL(hql, new Object[0]);
 	}
 
