@@ -1,6 +1,7 @@
 package com.adms.common.dao.generic.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -102,6 +103,29 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 		Query query = session.createQuery(hql);
 		for(int i = 0; i < vals.length; i++) {
 			query.setParameter(i, vals[i]);
+		}
+		
+		return (List<T>) query.list();
+	}
+	
+	/**
+	 * <p>The Object[] must contained paramName then paramValue; 
+	 * <br/>ex: Object[0] is paramName, Object[1] is paramValue
+	 * </p>
+	 * remark: this hql is able to use "in" where cause with ArrayList Object
+	 */
+	@SuppressWarnings("unchecked")
+	public List<T> findByHqlParamName(String hql, Object...params) throws Exception {
+		Session session = super.getSessionFactory().getCurrentSession();
+		Query query = session.createQuery(hql);
+		for(int i = 0; i < params.length; i+=2) {
+			String param = String.valueOf(params[i]);
+			Object val = params[i+1];
+			if(val instanceof List) {
+				query.setParameterList(param, ((List<?>) val).toArray());
+			} else {
+				query.setParameter(param, val);
+			}
 		}
 		return (List<T>) query.list();
 	}
