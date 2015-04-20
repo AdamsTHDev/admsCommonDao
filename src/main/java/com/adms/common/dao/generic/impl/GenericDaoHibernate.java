@@ -1,7 +1,6 @@
 package com.adms.common.dao.generic.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -98,6 +97,39 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<T> findByCriteria(DetachedCriteria criteria, Pageable pageable) throws Exception {
+		
+		try {
+			if (pageable != null)
+			{
+				if (pageable.getSort() != null)
+				{
+					for (Iterator<org.springframework.data.domain.Sort.Order> it = pageable.getSort().iterator(); it.hasNext();)
+					{
+						org.springframework.data.domain.Sort.Order sortOrder = it.next();
+						org.hibernate.criterion.Order order = null;
+						if (sortOrder.getDirection().toString().equalsIgnoreCase("DESC"))
+						{
+							order = org.hibernate.criterion.Order.desc(sortOrder.getProperty());
+						}
+						else
+						{
+							order = org.hibernate.criterion.Order.asc(sortOrder.getProperty());
+						}
+						criteria.addOrder(order);
+					}
+				}
+			}
+			
+			return (List<T>) super.getHibernateTemplate().findByCriteria(criteria, pageable.getPageNumber(), pageable.getPageSize());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<T> findByHQL(String hql, Object...vals) throws Exception {
 		Session session = super.getSessionFactory().getCurrentSession();
 		Query query = session.createQuery(hql);
@@ -187,39 +219,23 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 		}
 		return count;
 	}
+	
+	public Long findTotalCount(final DetachedCriteria criteria) throws Exception {
+		try {
+			return Long.parseLong(String.valueOf(this.findByCriteria(criteria).size()));
+		} catch(Exception e) {
+			throw e;
+		}
+	}
 
-	@SuppressWarnings("unchecked")
-	public List<T> findByExamplePaging(T object, Pageable pageable)
-			throws Exception
+	public List<T> findByExamplePaging(T object, Pageable pageable) throws Exception
 	{
 		Example example = Example.create(object);
 		DetachedCriteria criteria = DetachedCriteria.forClass(object.getClass()).add(example);
 
-		if (pageable != null)
-		{
-			if (pageable.getSort() != null)
-			{
-				for (Iterator<org.springframework.data.domain.Sort.Order> it = pageable.getSort().iterator(); it.hasNext();)
-				{
-					org.springframework.data.domain.Sort.Order sortOrder = it.next();
-					org.hibernate.criterion.Order order = null;
-					if (sortOrder.getDirection().toString().equalsIgnoreCase("DESC"))
-					{
-						order = org.hibernate.criterion.Order.desc(sortOrder.getProperty());
-					}
-					else
-					{
-						order = org.hibernate.criterion.Order.asc(sortOrder.getProperty());
-					}
-					criteria.addOrder(order);
-				}
-			}
-		}
-		return (List<T>) super.getHibernateTemplate().findByCriteria(criteria, pageable.getPageNumber(), pageable.getPageSize());
-		// return super.getHibernateTemplate().findByExample(object,
-		// pageable.getPageNumber(), pageable.getPageSize());
+		return this.findByCriteria(criteria, pageable);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<T> searchByExamplePaging(T object, Pageable pageable)
 			throws Exception

@@ -15,10 +15,12 @@ public interface GenericDao<T, PK extends Serializable> {
 	public T find(PK id) throws Exception;
 	public List<T> find(T example) throws Exception;
 	public List<T> findByCriteria(DetachedCriteria criteria) throws Exception;
+	public List<T> findByCriteria(DetachedCriteria criteria, Pageable pageable) throws Exception;
 	
 	public boolean delete(PK id) throws Exception;
 	
 	public Long findTotalCount() throws Exception;
+	public Long findTotalCount(final DetachedCriteria criteria) throws Exception;
 	public Long findTotalCount(final T object) throws Exception;
 	
 	public List<T> findByExamplePaging(T object, Pageable pageable) throws Exception;
