@@ -237,6 +237,11 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<T> findByNamedQuery(String queryName, Object ... values) throws Exception {
+		return (List<T>) super.getHibernateTemplate().findByNamedQuery(queryName, values);
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<T> searchByExamplePaging(T object, Pageable pageable)
 			throws Exception
 	{
@@ -277,13 +282,13 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 		return criteria.list();
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<T> findByNamedQuery(String queryName, Object ... values) throws Exception {
-		return (List<T>) super.getHibernateTemplate().findByNamedQuery(queryName, values);
-	}
-
 	public Long countByNamedQuery(String queryName, Object ... values) throws Exception {
 		return ((CountableDomain) super.getHibernateTemplate().findByNamedQuery(queryName, values).get(0)).getTotalCount();
+	}
+	
+	@Override
+	public int bulkUpdate(String query, Object...values) throws Exception {
+		return super.getHibernateTemplate().bulkUpdate(query, values);
 	}
 
 }

@@ -32,4 +32,6 @@ public interface GenericDao<T, PK extends Serializable> {
 	
 	public List<T> findByNamedQuery(String queryName, Object ... values) throws Exception;
 	public Long countByNamedQuery(String queryName, Object ... values) throws Exception;
+	
+	public int bulkUpdate(String query, Object... values) throws Exception;
 }

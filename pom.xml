@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<hibernate.version>4.3.6.Final</hibernate.version>
-		<spring.version>4.0.6.RELEASE</spring.version>
+		<spring.version>4.1.6.RELEASE</spring.version>
 	</properties>
 
 	<build>
@@ -54,7 +54,6 @@
 			<artifactId>hibernate-ehcache</artifactId>
 			<version>4.3.5.Final</version>
 		</dependency>
-
 		
 		<!-- Ehcache -->
 		<dependency>
